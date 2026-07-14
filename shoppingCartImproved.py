@@ -23,17 +23,43 @@ groceryList = {
 }
 
 def normalizeAisleInput(shopperChoice):
-    if shopperChoice == "dairy" or "dairy and" or "eggs" or "and eggs" or "dairy and eggs":
+    if shopperChoice in ["dairy", "dairy and", "eggs", "and eggs", "dairy and eggs"]:
         return "dairy and eggs"
-    elif shopperChoice == "meat" or "meat and" or "and protein" or "protein" or "meat and protein":
+    elif shopperChoice in ["meat", "meat and", "and protein", "protein", "meat and protein"]:
         return "meat and protein"
-    elif shopperChoice == "pantry" or "staples" or "pantry staples":
+    elif shopperChoice in ["pantry", "staples", "pantry staples"]:
         return "pantry staples"
     elif shopperChoice == "produce":
         return "produce"
     else:
         return "No"
+    
 
+def purchase(aisle):
+    itemName = input("What Do You Want To Buy(q to leave)?").lower().strip()
+    if itemName == "q":
+        return False
+
+    
+    for product in aisle:
+
+        if product["item"].lower() == itemName:
+            numberOf = int(input("How many would You Like? "))
+
+            # if numberOf > product.get("quantity"):
+            #     print(f"The max is {product.get('quantity')}!")
+            # else:
+            price = product.get("price")
+            cost = price * numberOf
+            print(f"Cost Is {cost:.2f}")
+            return cost
+
+    print("Item Not Found")
+    return False
+
+
+
+    
 
 
 def main():
@@ -58,7 +84,32 @@ def main():
                 else:
                     aisleList = groceryList.get(aisle)
                     for item in aisleList:
-                        print("-------------")
+                        print("-------------",)
+                        for attribute in item:
+                            print(f"{attribute}: {item.get(attribute)}", end=" ")
+                            print("\n-------------")
+                        print()
+
+                    purchase(aisleList)
+
+
+
+        else:
+            print("What Else Would You Like You Look At Today?")
+            aisle = input("Produce | Dairy and Eggs | Meat and Protein | Pantry Staples | (q to leave)\n").lower().strip()
+
+            if aisle == "q":
+                break
+            else:
+                aisle = normalizeAisleInput(aisle)
+
+                if aisle == "No":
+                    print("Not A Valid Input!!!")
+                    pass
+                else:
+                    aisleList = groceryList.get(aisle)
+                    for item in aisleList:
+                        print("-------------",)
                         for attribute in item:
                             print(f"{attribute}: {item.get(attribute)}", end=" ")
                             print("\n-------------")
